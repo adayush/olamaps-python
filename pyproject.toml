@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "olamaps"
+version = "0.1.0"
+description = "Python client library for Ola Maps API Web Services"
+authors = ["adayush <adayush0@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+aiohttp = "^3.9.5"
+pytest = "^8.2.2"
+python-dotenv = "^1.0.1"
+pytest-asyncio = "^0.23.7"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

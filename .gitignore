@@ -1,0 +1,7 @@
+.DS_Store
+.env
+.pytest_cache
+
+pyrightconfig.json
+venv
+__pycache__
