@@ -9,6 +9,7 @@ _DEFAULT_BASE_URL = "https://api.olamaps.io"
 
 class Client:
     from .places import geocode, reverse_geocode
+    from .routing import directions
 
     def __init__(
         self,
@@ -63,8 +64,14 @@ class Client:
         if not self.session.headers.get("Authorization"):
             params["api_key"] = self.api_key
 
-        response = await self.session.request(method=method, url=url, params=params)
-        return await response.json()
+        response = await self.session.request(
+            method=method,
+            url=url,
+            params=params,
+            timeout=aiohttp.ClientTimeout(total=30),
+        )
+
+        return {"status_code": response.status, **(await response.json())}
 
     async def close(self):
         await self.session.close()

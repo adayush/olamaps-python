@@ -1,30 +1,28 @@
-from typing import Union, Optional
+from typing import Union, Optional, Tuple
 
 
-async def geocode(self, address: str, bounds: Optional[str] = None):
+async def geocode(self, address: str, bounds: Optional[Tuple[str, str]] = None):
     """Returns the geocoded address based on the provided parameters"""
 
     assert len(address), "Address is required"
 
-    address = address.replace(",", " ")
+    params = {
+        "address": address.replace(",", " "),
+    }
+    if bounds:
+        params["bounds"] = f"{bounds[0]}|{bounds[1]}"
 
     return await self._request(
         "GET",
         "/places/v1/geocode",
-        params={"address": address},
+        params=params,
     )
 
 
-async def reverse_geocode(
-    self, lat: Union[str, int, float], lng: Union[str, int, float]
-):
+async def reverse_geocode(self, lat: str, lng: str):
     """Provides information of a place based on the location provided satisfying the given criteria"""
 
-    lat = float(lat)
-    lng = float(lng)
-
-    assert -90 <= lat <= 90, "Invalid latitude"
-    assert -180 <= lng <= 180, "Invalid longitude"
+    assert len(lat) and len(lng), "Invalid latitude or longitude provided"
 
     return await self._request(
         "GET",

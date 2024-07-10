@@ -8,24 +8,19 @@ load_dotenv()
 
 
 @pytest.mark.asyncio
-async def test_geocoding_missing_address(client):
+async def test_geocoding_missing_address(client: Client):
     with pytest.raises(AssertionError):
         await client.geocode("")
 
 
 @pytest.mark.asyncio
-async def test_geocoding(client):
+async def test_geocoding(client: Client):
     res = await client.geocode("World Trade Park, Jaipur")
-    assert res["status"] == "ok"
+    print(res)
+    assert res["status_code"] == 200
 
 
 @pytest.mark.asyncio
-async def test_reverse_geocoding_invalid_lat_lng(client):
-    with pytest.raises(AssertionError):
-        res = await client.reverse_geocode(91, 181)
-
-
-@pytest.mark.asyncio
-async def test_reverse_geocoding_valid_lat_lng(client):
-    res = await client.reverse_geocode(12.9519408, 77.6381845)
-    assert res["status"] == "ok"
+async def test_reverse_geocoding(client: Client):
+    res = await client.reverse_geocode("12.9519408", "77.6381845")
+    assert res["status_code"] == 200
