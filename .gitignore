@@ -5,3 +5,6 @@
 pyrightconfig.json
 venv
 __pycache__
+
+dist/
+build/
