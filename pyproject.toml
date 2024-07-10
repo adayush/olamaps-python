@@ -1,9 +1,15 @@
 [tool.poetry]
 name = "olamaps"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python client library for Ola Maps API Web Services"
+license = "MIT"
 authors = ["adayush <adayush0@gmail.com>"]
 readme = "README.md"
+
+[project.urls]
+Homepage = "https://github.com/adayush/olamaps-python"
+repository = "https://github.com/adayush/olamaps-python"
+Issues = "https://github.com/adayush/olamaps-python/issues"
 
 [tool.poetry.dependencies]
 python = "^3.9"
