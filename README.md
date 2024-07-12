@@ -2,6 +2,10 @@
 
 A Python wrapper for the OLA Maps API, providing easy-to-use abstractions for developers.
 
+![Stable Version](https://img.shields.io/pypi/v/olamaps?label=stable)
+![Python Versions](https://img.shields.io/pypi/pyversions/olamaps)
+[![Download Stats](https://img.shields.io/pypi/dm/olamaps)](https://pypistats.org/packages/olamaps)
+
 ## Installation
 
 Install the package using pip:
