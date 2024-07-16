@@ -3,7 +3,7 @@ import pytest
 import asyncio
 from dotenv import load_dotenv
 
-from olamaps import Client
+from olamaps import Client, AuthError, ClientError
 
 load_dotenv()
 
@@ -15,7 +15,7 @@ async def test_missing_params():
         mp.delenv("OLAMAPS_CLIENT_ID", raising=False)
         mp.delenv("OLAMAPS_CLIENT_SECRET", raising=False)
 
-        with pytest.raises(AttributeError):
+        with pytest.raises(ClientError):
             client = Client()
             await client.close()
 
@@ -27,7 +27,7 @@ async def test_partial_params():
         mp.delenv("OLAMAPS_CLIENT_ID", raising=False)
         mp.delenv("OLAMAPS_CLIENT_SECRET", raising=False)
 
-        with pytest.raises(AttributeError):
+        with pytest.raises(ClientError):
             client = Client(client_id="1234")
             await client.close()
 
@@ -39,7 +39,7 @@ async def test_invalid_client_params():
         mp.setenv("OLAMAPS_CLIENT_ID", "1234")
         mp.setenv("OLAMAPS_CLIENT_SECRET", "1234")
 
-        with pytest.raises(AssertionError):
+        with pytest.raises(AuthError):
             client = Client()
             await client.close()
 
@@ -48,3 +48,14 @@ async def test_invalid_client_params():
 async def test_valid_client_params():
     client = Client()
     await client.close()
+
+
+@pytest.mark.asyncio
+async def test_invalid_api_key():
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setenv("OLAMAPS_API_KEY", "1234")
+
+        with pytest.raises(AuthError):
+            client = Client()
+            await client.geocode("World Trade Park, Jaipur")
+            await client.close()

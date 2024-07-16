@@ -15,12 +15,11 @@ async def test_geocoding_missing_address(client: Client):
 
 @pytest.mark.asyncio
 async def test_geocoding(client: Client):
-    res = await client.geocode("World Trade Park, Jaipur")
-    print(res)
-    assert res["status_code"] == 200
+    results = await client.geocode("World Trade Park, Jaipur")
+    assert len(results)
 
 
 @pytest.mark.asyncio
 async def test_reverse_geocoding(client: Client):
-    res = await client.reverse_geocode("12.9519408", "77.6381845")
-    assert res["status_code"] == 200
+    results = await client.reverse_geocode("12.9519408", "77.6381845")
+    assert len(results)

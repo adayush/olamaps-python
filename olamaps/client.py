@@ -4,6 +4,8 @@ import requests
 from urllib.parse import quote_plus
 from typing import Optional
 
+from .exceptions import AuthError, ClientError, InvalidRequestError, MapsServiceError
+
 _DEFAULT_BASE_URL = "https://api.olamaps.io"
 
 
@@ -21,6 +23,7 @@ class Client:
         """
         :param client_id: Ola Maps API client ID. Required unless environment variable OLAMAPS_CLIENT_ID is set
         :param client_secret: Ola Maps API client secret. Required unless environment variable OLAMAPS_CLIENT_SECRET is set
+        :param api_key: Ola Maps API key. Required unless environment variable OLAMAPS_API_KEY is set
 
         :param base_url: Base URL for the Ola Maps API. Default is https://api.olamaps.io
         """
@@ -41,11 +44,11 @@ class Client:
                 headers={"Authorization": f"Bearer {token}"},
             )
         else:
-            raise AttributeError(
-                "Either Ola Maps API key or both client ID and client secret are required"
+            raise ClientError(
+                "Either Ola Maps API key or both client ID and client secret are required."
             )
 
-    def _get_token(self):
+    def _get_token(self) -> str:
         response = requests.post(
             url="https://account.olamaps.io/realms/olamaps/protocol/openid-connect/token",
             data={
@@ -55,12 +58,18 @@ class Client:
                 "client_secret": self.client_secret,
             },
         ).json()
-        assert response.get(
-            "access_token"
-        ), "Invalid client or Invalid client credentials"
+
+        if response.get("error"):
+            raise AuthError(
+                response.get(
+                    "error_description",
+                    "Invalid client id or secret provided.",
+                )
+            )
+
         return response.get("access_token")
 
-    async def _request(self, method, url, params):
+    async def _request(self, method, url, params) -> dict:
         if not self.session.headers.get("Authorization"):
             params["api_key"] = self.api_key
 
@@ -71,7 +80,21 @@ class Client:
             timeout=aiohttp.ClientTimeout(total=30),
         )
 
-        return {"status_code": response.status, **(await response.json())}
+        if response.status == 401:
+            raise AuthError
+
+        response = {"status_code": response.status, **(await response.json())}
+
+        if response["status_code"] >= 500:
+            raise MapsServiceError(
+                response.get("reason", "Maps service faced some issue.")
+            )
+        elif response["status_code"] >= 400:
+            raise InvalidRequestError(
+                response.get("reason", "Invalid request parameters were sent.")
+            )
+
+        return response
 
     async def close(self):
         await self.session.close()
