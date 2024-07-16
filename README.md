@@ -53,16 +53,19 @@ from olamaps import Client
 client = Client()
 
 # Geocode an address
-results = client.geocode("MG Road, Bangalore")
+results = await client.geocode("MG Road, Bangalore")
 
 # Reverse geocode a latitude-longitude pair
-results = client.reverse_geocode(lat=12.9519408, lng=77.6381845)
+results = await client.reverse_geocode(lat=12.9519408, lng=77.6381845)
 
 # Get directions from one place to another
-results = client.directions(
+results = await client.directions(
     origin="12.993103152916301,77.54332622119354",
     destination="12.972006793201695,77.5800850011884",
 )
+
+# close the client
+await client.close()
 ```
 
 ## Contributing
