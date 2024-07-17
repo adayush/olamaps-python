@@ -1,10 +1,16 @@
-# OLA Maps Python Package (unofficial)
+# OLA Maps Python Package
 
 A Python wrapper for the OLA Maps API, providing easy-to-use abstractions for developers.
 
-![Stable Version](https://img.shields.io/pypi/v/olamaps?label=stable)
+[![Stable Version](https://img.shields.io/pypi/v/olamaps?label=stable)](https://pypi.org/project/olamaps/)
 ![Python Versions](https://img.shields.io/pypi/pyversions/olamaps)
 [![Download Stats](https://img.shields.io/pypi/dm/olamaps)](https://pypistats.org/packages/olamaps)
+
+## Supported APIs
+
+- Geocoding
+- Reverse geocoding
+- Directions
 
 ## Installation
 
@@ -13,12 +19,6 @@ Install the package using pip:
 ```
 pip install olamaps
 ```
-
-## Supported APIs
-
-- Geocoding
-- Reverse geocoding
-- Directions
 
 ## Authentication
 
