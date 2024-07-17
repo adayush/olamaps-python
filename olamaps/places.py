@@ -1,6 +1,42 @@
 from typing import Union, Optional, Tuple
 
 
+async def autocomplete(
+    self,
+    text: str,
+    location: Optional[str] = None,
+    radius: Optional[int] = None,
+):
+    """
+    Provides Autocomplete suggestions for a given substring satisfying the given criteria
+
+    :param text: The partial text to be matched
+    :param location: The point around which to retrieve place information and from which to calculate straight-line distance to the destination. This must be specified as lat,lng.
+    :param radius: The distance (in meters) within which to return place results.
+    """
+
+    assert len(text), "Text is required"
+
+    params = {
+        "input": text,
+    }
+
+    if location:
+        params["location"] = location
+    if radius:
+        params["radius"] = radius
+    if location and radius:
+        params["strictbounds"] = "true"
+
+    response = await self._request(
+        "GET",
+        "/places/v1/autocomplete",
+        params=params,
+    )
+
+    return response["predictions"]
+
+
 async def geocode(self, address: str, bounds: Optional[Tuple[str, str]] = None) -> list:
     """
     Returns the geocoded address based on the provided parameters

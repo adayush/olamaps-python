@@ -8,6 +8,7 @@ A Python wrapper for the OLA Maps API, providing easy-to-use abstractions for de
 
 ## Supported APIs
 
+- Autocomplete
 - Geocoding
 - Reverse geocoding
 - Directions
@@ -52,11 +53,14 @@ from olamaps import Client
 # Initialize the client
 client = Client()
 
+# Autocomplete a query
+results = await client.autocomplete("Kempe")
+
 # Geocode an address
 results = await client.geocode("MG Road, Bangalore")
 
 # Reverse geocode a latitude-longitude pair
-results = await client.reverse_geocode(lat=12.9519408, lng=77.6381845)
+results = await client.reverse_geocode(lat="12.9519408", lng="77.6381845")
 
 # Get directions from one place to another
 results = await client.directions(

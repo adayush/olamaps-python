@@ -10,7 +10,7 @@ _DEFAULT_BASE_URL = "https://api.olamaps.io"
 
 
 class Client:
-    from .places import geocode, reverse_geocode
+    from .places import autocomplete, geocode, reverse_geocode
     from .routing import directions
 
     def __init__(
