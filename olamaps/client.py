@@ -1,6 +1,5 @@
 import os
-import aiohttp
-import requests
+import httpx
 from urllib.parse import quote_plus
 from typing import Optional
 
@@ -18,7 +17,7 @@ class Client:
         client_id: Optional[str] = None,
         client_secret: Optional[str] = None,
         api_key: Optional[str] = None,
-        base_url: Optional[str] = _DEFAULT_BASE_URL,
+        base_url: str = _DEFAULT_BASE_URL,
     ):
         """
         :param client_id: Ola Maps API client ID. Required unless environment variable OLAMAPS_CLIENT_ID is set
@@ -33,23 +32,20 @@ class Client:
         self.api_key = api_key or os.environ.get("OLAMAPS_API_KEY")
         self.base_url = base_url or _DEFAULT_BASE_URL
 
+        self.session = httpx.AsyncClient(base_url=base_url, timeout=30)
+
         if self.api_key:
-            self.session = aiohttp.ClientSession(
-                base_url=base_url,
-            )
+            self.session.params = {"api_key": self.api_key}
         elif self.client_id and self.client_secret:
             token = self._get_token()
-            self.session = aiohttp.ClientSession(
-                base_url=base_url,
-                headers={"Authorization": f"Bearer {token}"},
-            )
+            self.session.headers = {"Authorization": f"Bearer {token}"}
         else:
             raise ClientError(
                 "Either Ola Maps API key or both client ID and client secret are required."
             )
 
     def _get_token(self) -> str:
-        response = requests.post(
+        response = httpx.post(
             url="https://account.olamaps.io/realms/olamaps/protocol/openid-connect/token",
             data={
                 "grant_type": "client_credentials",
@@ -70,20 +66,16 @@ class Client:
         return response.get("access_token")
 
     async def _request(self, method, url, params) -> dict:
-        if not self.session.headers.get("Authorization"):
-            params["api_key"] = self.api_key
-
         response = await self.session.request(
             method=method,
             url=url,
             params=params,
-            timeout=aiohttp.ClientTimeout(total=30),
         )
 
-        if response.status == 401:
+        if response.status_code == 401:
             raise AuthError
 
-        response = {"status_code": response.status, **(await response.json())}
+        response = {"status_code": response.status_code, **(response.json())}
 
         if response["status_code"] >= 500:
             raise MapsServiceError(
@@ -97,4 +89,4 @@ class Client:
         return response
 
     async def close(self):
-        await self.session.close()
+        await self.session.aclose()
