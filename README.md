@@ -18,7 +18,7 @@ A Python wrapper for the OLA Maps API, providing easy-to-use abstractions for de
 - [Installation](#installation)
 - [Authentication](#authentication)
 - [Client](#client)
-- [AsyncClient](#async-client)
+- [AsyncClient](#asyncclient)
 
 ### Installation
 
@@ -38,7 +38,7 @@ There are two ways to authenticate:
    os.environ["OLAMAPS_API_KEY"] = "your_api_key"
 
    # OR
-   client = Client(api_key="your_api_key_here")
+   client = Client(api_key="your_api_key")
    ```
 
 2. Or using `client_id` and `client_secret`
