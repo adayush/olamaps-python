@@ -13,7 +13,14 @@ A Python wrapper for the OLA Maps API, providing easy-to-use abstractions for de
 - Reverse geocoding
 - Directions
 
-## Installation
+## Usage
+
+- [Installation](#installation)
+- [Authentication](#authentication)
+- [Client](#client)
+- [AsyncClient](#async-client)
+
+### Installation
 
 Install the package using pip:
 
@@ -21,7 +28,7 @@ Install the package using pip:
 pip install olamaps
 ```
 
-## Authentication
+### Authentication
 
 There are two ways to authenticate:
 
@@ -44,32 +51,59 @@ There are two ways to authenticate:
    client = Client(client_id="your_client_id", client_secret="your_client_secret")
    ```
 
-## Usage
+Follow the same steps for AsyncClient as well.
+
+### Client
 
 ```python
-import os
 from olamaps import Client
 
 # Initialize the client
 client = Client()
 
 # Autocomplete a query
-results = await client.autocomplete("Kempe")
+results = client.autocomplete("Kempe")
 
 # Geocode an address
-results = await client.geocode("MG Road, Bangalore")
+results = client.geocode("MG Road, Bangalore")
 
 # Reverse geocode a latitude-longitude pair
-results = await client.reverse_geocode(lat="12.9519408", lng="77.6381845")
+results = client.reverse_geocode(lat="12.9519408", lng="77.6381845")
 
 # Get directions from one place to another
-results = await client.directions(
+results = client.directions(
     origin="12.993103152916301,77.54332622119354",
     destination="12.972006793201695,77.5800850011884",
 )
 
 # close the client
+client.close()
+```
+
+Or you can use the context manager, in which case you don't need to close the client manually:
+
+```python
+with Client() as client:
+    results = client.autocomplete("Kempe")
+```
+
+### AsyncClient
+
+Usage is very similar to Client, except that all methods are coroutines:
+
+```python
+# use await for all methods
+results = await client.autocomplete("Kempe")
+
+# use await for closing the client
 await client.close()
+```
+
+Also the context manager is async:
+
+```python
+async with AsyncClient() as client:
+    results = await client.autocomplete("Kempe")
 ```
 
 ## Contributing
