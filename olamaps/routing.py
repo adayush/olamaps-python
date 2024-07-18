@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Literal
 
 
 def directions(
@@ -8,6 +8,7 @@ def directions(
     waypoints: Optional[list[str]] = None,
     alternatives: Optional[bool] = None,
     steps: Optional[bool] = None,
+    overview: Optional[Literal['full', 'simplified', 'false']] = 'full'
 ) -> list:
     """
     Provides routable path between two or more points. Accepts coordinates in lat,long format.
@@ -17,6 +18,7 @@ def directions(
     :param waypoints: List of coordinates in lat,lng format
     :param alternatives: Whether or not to provide multiple routes
     :param steps: Whether or not to provide steps for the route
+    :param overview: Overview geometry either full, simplified or false
     """
 
     assert len(origin), "Invalid origin coordinates provided."
@@ -32,6 +34,9 @@ def directions(
         params["alternatives"] = str(alternatives).lower()
     if steps:
         params["steps"] = str(steps).lower()
+    if overview:
+        params["overview"] = overview
+        
 
     response = self._request(
         "POST",
@@ -49,6 +54,7 @@ async def async_directions(
     waypoints: Optional[list[str]] = None,
     alternatives: Optional[bool] = None,
     steps: Optional[bool] = None,
+    overview: Optional[Literal['full', 'simplified', 'false']] = 'full'
 ) -> list:
     """
     Provides routable path between two or more points. Accepts coordinates in lat,long format.
@@ -58,6 +64,7 @@ async def async_directions(
     :param waypoints: List of coordinates in lat,lng format
     :param alternatives: Whether or not to provide multiple routes
     :param steps: Whether or not to provide steps for the route
+    :param overview: Overview geometry either full, simplified or false
     """
 
     assert len(origin), "Invalid origin coordinates provided."
@@ -73,6 +80,8 @@ async def async_directions(
         params["alternatives"] = str(alternatives).lower()
     if steps:
         params["steps"] = str(steps).lower()
+    if overview:
+        params["overview"] = overview
 
     response = await self._request(
         "POST",
