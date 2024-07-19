@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "olamaps"
-version = "0.5.0"
+version = "0.5.1"
 description = "Python client library for Ola Maps API Web Services"
 license = "MIT"
 authors = ["adayush <adayush0@gmail.com>"]
