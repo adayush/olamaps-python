@@ -2,9 +2,11 @@
 
 A Python wrapper for the OLA Maps API, providing easy-to-use abstractions for developers.
 
-[![Stable Version](https://img.shields.io/pypi/v/olamaps?label=stable)](https://pypi.org/project/olamaps/)
-![Python Versions](https://img.shields.io/pypi/pyversions/olamaps)
-[![Download Stats](https://img.shields.io/pypi/dm/olamaps)](https://pypistats.org/packages/olamaps)
+[![Stable Version](https://img.shields.io/pypi/v/olamaps?style=flat-square&label=latest)](https://pypi.org/project/olamaps/)
+![Python Versions](https://img.shields.io/pypi/pyversions/olamaps?style=flat-square)
+[![PyPI - License](https://img.shields.io/pypi/l/olamaps?style=flat-square)](https://opensource.org/licenses/MIT)
+[![Download Stats](https://img.shields.io/pypi/dm/olamaps?style=flat-square)](https://pypistats.org/packages/olamaps)
+[![Dependency Status](https://img.shields.io/librariesio/github/adayush/olamaps-python?style=flat-square)](https://libraries.io/github/adayush/olamaps-python)
 
 ## Supported APIs
 
@@ -92,6 +94,11 @@ with Client() as client:
 Usage is very similar to Client, except that all methods are coroutines:
 
 ```python
+from olamaps import AsyncClient
+
+# Initialize the client
+client = AsyncClient()
+
 # use await for all methods
 results = await client.autocomplete("Kempe")
 
